@@ -22,7 +22,6 @@ body {
   background-size: 50px 50px;
 }
 
-/* Vignette for grid edges */
 body::before {
   content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: radial-gradient(circle at center, transparent 0%, #050505 100%);
@@ -152,3 +151,109 @@ body::before {
   transition: background 0.2s;
 }
 .close-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* ========================================= */
+/* RESPONSIVE MOBILE STYLES            */
+/* ========================================= */
+
+@media (max-width: 768px) {
+  /* 1. Reset Cursor for Touch Devices */
+  body { cursor: auto; }
+  .custom-cursor { display: none; }
+  .spotlight-card { cursor: pointer; }
+  .scroll-indicator { cursor: pointer; }
+
+  /* 2. Navigation */
+  nav {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem 5% !important;
+  }
+  .social-container {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  /* On mobile, social pills might be too big if they expand fully, 
+     but we can let them keep the interaction or simplify it. 
+     Let's scale them down slightly. */
+  .social-link { width: 40px; height: 40px; }
+  .social-link:hover { width: 40px; } /* Disable expansion on touch to prevent layout shifts */
+  .social-text { display: none; } /* Hide text on mobile pills */
+
+  /* 3. Hero Section */
+  .hero-section {
+    flex-direction: column-reverse; /* Image on top? Or Text on top. Let's do Text top, Image bottom */
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding-top: 2rem !important;
+    gap: 3rem;
+    min-height: auto !important; /* Let content dictate height */
+  }
+
+  .hero-left {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-right {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  h1 { font-size: 3rem !important; }
+  
+  /* 4. Tilted Card Mobile Sizing */
+  .tilted-card-figure {
+    height: 350px !important; /* Force smaller height */
+    width: 100% !important;
+  }
+  .tilted-card-inner, .tilted-card-img {
+    width: 280px !important;
+    height: 380px !important;
+  }
+
+  /* 5. Hide Floating Stickers on Mobile (Too messy on small screens) */
+  .hero-sticker { display: none; }
+
+  /* 6. Grid */
+  .grid-section {
+    grid-template-columns: 1fr !important; /* Single column */
+    padding-bottom: 4rem !important;
+  }
+
+  /* 7. Book Modal Responsive */
+  .book-container {
+    width: 90%;
+    height: 80vh;
+    flex-direction: column; /* Stack pages */
+  }
+  .book-left, .book-right {
+    width: 100%;
+    height: 50%;
+  }
+  .book-left { 
+    z-index: 20; 
+  }
+  /* Disable the flip animation logic visually or just show the inside content immediately? 
+     A simple fix is to just show the PDF link on mobile or make the book simpler. 
+     Let's just stack them. */
+  .book-cover-front { display: none; } /* Hide cover, show content immediately */
+  .book-inside-left { 
+    transform: none; 
+    border-radius: 8px 8px 0 0; 
+    padding: 20px;
+  }
+  .book-right {
+    border-radius: 0 0 8px 8px;
+  }
+  .close-btn {
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+  }
+}

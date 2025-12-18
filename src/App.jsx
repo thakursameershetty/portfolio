@@ -103,9 +103,18 @@ const SpotlightCard = ({ children, onClick, mediaType, mediaSrc, style = {} }) =
 };
 
 // --- STICKER COMPONENT ---
-const Sticker = ({ children, top, left, right, bottom, rotate = 0 }) => {
+const Sticker = ({ children, top, left, right, bottom, rotate = 0, className }) => {
   return (
-    <motion.div drag dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }} whileHover={{ scale: 1.1, cursor: 'grab', zIndex: 150 }} whileTap={{ scale: 0.9, cursor: 'grabbing' }} initial={{ opacity: 0, y: 20, rotate: rotate }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 200, damping: 20 }} style={{ position: 'absolute', top, left, right, bottom, zIndex: 50, filter: 'drop-shadow(0px 10px 10px rgba(0,0,0,0.2))' }}>
+    <motion.div 
+      className={`hero-sticker ${className || ''}`} // Add class for mobile hiding
+      drag dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }} 
+      whileHover={{ scale: 1.1, cursor: 'grab', zIndex: 150 }} 
+      whileTap={{ scale: 0.9, cursor: 'grabbing' }} 
+      initial={{ opacity: 0, y: 20, rotate: rotate }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ type: "spring", stiffness: 200, damping: 20 }} 
+      style={{ position: 'absolute', top, left, right, bottom, zIndex: 50, filter: 'drop-shadow(0px 10px 10px rgba(0,0,0,0.2))' }}
+    >
       {children}
     </motion.div>
   );
@@ -125,14 +134,13 @@ const BookModal = ({ isOpen, onClose }) => {
         <div className="book-container" onClick={(e) => e.stopPropagation()}>
           <button className="close-btn" onClick={onClose}><X size={20} /></button>
 
-          {/* LEFT PAGE (Cover + Bio) */}
+          {/* LEFT PAGE */}
           <motion.div 
             className="book-left"
             initial={{ rotateY: 0 }}
             animate={{ rotateY: -180 }}
             transition={{ duration: 1.2, type: "spring", stiffness: 50 }}
           >
-            {/* Front Cover */}
             <div className="book-cover-front">
               <div style={{ border: '2px solid #fff', padding: '20px', borderRadius: '4px' }}>
                 <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#fff', margin: 0, lineHeight: 1 }}>PORTFOLIO</h2>
@@ -141,7 +149,6 @@ const BookModal = ({ isOpen, onClose }) => {
               <p style={{ position: 'absolute', bottom: '30px', color: '#666', fontSize: '0.8rem' }}>TAP TO OPEN</p>
             </div>
 
-            {/* Inside Left Page */}
             <div className="book-inside-left">
               <div style={{ borderBottom: '2px solid #ddd', paddingBottom: '15px', marginBottom: '20px' }}>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#222', margin: 0 }}>Thakur Sameer Shetty</h3>
@@ -149,45 +156,24 @@ const BookModal = ({ isOpen, onClose }) => {
               </div>
               
               <div style={{ fontSize: '0.9rem', lineHeight: '1.6', color: '#444' }}>
-                <p style={{ marginBottom: '15px' }}>
-                  <b>About Me:</b><br/>
-                  I bridge the gap between design and code. My goal is to build immersive web experiences that feel "alive" using modern tech stacks and fluid animations.
-                </p>
-                <p style={{ marginBottom: '15px' }}>
-                  <b>Education:</b><br/>
-                  B.Tech CSE (85.4%)<br/>
-                  <span style={{ fontSize: '0.8rem', color: '#666' }}>Gayatri Vidya Parishad</span>
-                </p>
-                <p>
-                  <b>Stack:</b><br/>
-                  React, Three.js, Python, Figma
-                </p>
+                <p style={{ marginBottom: '15px' }}><b>About Me:</b><br/>I bridge the gap between design and code.</p>
+                <p style={{ marginBottom: '15px' }}><b>Education:</b><br/>B.Tech CSE (85.4%)<br/><span style={{ fontSize: '0.8rem', color: '#666' }}>Gayatri Vidya Parishad</span></p>
+                <p><b>Stack:</b><br/>React, Three.js, Python, Figma</p>
               </div>
-
-              <div style={{ marginTop: 'auto' }}>
-                 <p style={{ fontSize: '0.8rem', color: '#888', fontStyle: 'italic' }}>Visakhapatnam, India</p>
-              </div>
+              <div style={{ marginTop: 'auto' }}><p style={{ fontSize: '0.8rem', color: '#888', fontStyle: 'italic' }}>Visakhapatnam, India</p></div>
             </div>
           </motion.div>
 
-          {/* RIGHT PAGE (PDF) */}
+          {/* RIGHT PAGE */}
           <motion.div 
             className="book-right"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-             <iframe 
-                src="/assets/Tammana_Thakur_Sameer_Shetty_Resume.pdf#view=FitH&toolbar=0&navpanes=0&scrollbar=0"
-                className="resume-frame"
-                title="Resume PDF"
-             />
+             <iframe src="/assets/Tammana_Thakur_Sameer_Shetty_Resume.pdf#view=FitH&toolbar=0&navpanes=0&scrollbar=0" className="resume-frame" title="Resume PDF" />
              <div className="pdf-action-bar">
-                <a 
-                   href="/assets/Tammana_Thakur_Sameer_Shetty_Resume.pdf" 
-                   download="Tammana_Thakur_Resume.pdf"
-                   className="download-pill"
-                >
+                <a href="/assets/Tammana_Thakur_Sameer_Shetty_Resume.pdf" download="Tammana_Thakur_Resume.pdf" className="download-pill">
                    <Download size={16} /> Save PDF
                 </a>
              </div>
@@ -200,120 +186,16 @@ const BookModal = ({ isOpen, onClose }) => {
 
 // --- DATA ---
 const projects = [
-  { 
-    id: 0, 
-    title: "Nova App Redesign", 
-    category: "Figma", 
-    description: "Fintech UI redesign featuring glassmorphism, 'Quick Send' flows, and reduced visual noise.", 
-    icon: <CreditCard size={28} />, 
-    color: "#3b82f6", 
-    link: "https://www.figma.com/proto/Y5b1PizrZbKH9M3IvgLDs9/Nova-App-Redesign",
-    mediaType: "video",
-    mediaSrc: "/assets/Nova App.mov" 
-  },
-  { 
-    id: 1, 
-    title: "UI Components Kit", 
-    category: "Figma", 
-    description: "High-fidelity library of interactive components (carousels, loaders) focusing on micro-interactions.", 
-    icon: <Layout size={28} />, 
-    color: "#8b5cf6", 
-    link: "https://www.figma.com/design/418FHfFGm3hTKFwvSiEhg4/UI-Components-Kit?node-id=0-1&t=twx4pL3RIyKd2eAW-1",
-    mediaType: "image", 
-    // Placeholder until you add media
-    mediaSrc: "/assets/uicomponents.png"
-  },
-  { 
-    id: 2, 
-    title: "MindBridge", 
-    category: "Development", 
-    description: "Accessibility-first platform bridging the gap for neurodiverse users.", 
-    icon: <Brain size={28} />, 
-    color: "#ec4899", 
-    link: "https://mind-bridge-ashen.vercel.app/index.html",
-    mediaType: "video",
-    mediaSrc: "/assets/mindbridge.mp4" 
-  },
-  { 
-    id: 3, 
-    title: "Greeting Cards Maker", 
-    category: "Development", 
-    description: "Aesthetic, customizable UI allowing users to craft personal e-cards.", 
-    icon: <PenTool size={28} />, 
-    color: "#ef4444", 
-    link: "https://www.linkedin.com/posts/thakur-sameer-shetty-tammana_miniproject-databasemanagement-webdevelopment-activity-7312475852766691331-md4P?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEUvQ6MBdWcS07pVwwfK76b0tcDDFKUgq6E",
-    mediaType: "video",
-    mediaSrc: "/assets/Greeting Cards Maker.mp4" 
-  },
-  { 
-    id: 4, 
-    title: "Lumina Wallet", 
-    category: "Development", 
-    description: "Next-gen fintech wallet interface.", 
-    icon: <Wallet size={28} />, 
-    color: "#f59e0b", 
-    link: "https://lumina-wallet-fawn.vercel.app",
-    mediaType: "video",
-    mediaSrc: "/assets/luminawallet.mov"
-  },
-  { 
-    id: 5, 
-    title: "Solo Traveler App", 
-    category: "Figma", 
-    description: "High-fidelity wireframes solving safety pain points for solo travelers.", 
-    icon: <Figma size={28} />, 
-    color: "#ff75c3", 
-    link: "https://www.figma.com/proto/Ngtg3qmmrWMMwt0Fd7CtOz",
-    mediaType: "video",
-    mediaSrc: "/assets/solotravelapp.mp4"
-  },
-  { 
-    id: 6, 
-    title: "Gesture Shop", 
-    category: "Development", 
-    description: "Immersive spatial e-commerce experience using Three.js and hand-tracking.", 
-    icon: <Code size={28} />, 
-    color: "#61dafb", 
-    link: "https://gesture-shop.vercel.app",
-    mediaType: "video",
-    // Placeholder video
-    mediaSrc: "/assets/guestureshop.mp4" 
-  },
-  { 
-    id: 7, 
-    title: "Aura Player", 
-    category: "Development", 
-    description: "Futuristic 3D music player interface with spatial audio visualizations.", 
-    icon: <Music size={28} />, 
-    color: "#a855f7", 
-    link: "https://aura-player-neon.vercel.app",
-    mediaType: "video",
-    // Placeholder video
-    mediaSrc: "/assets/auraplayer.mp4" 
-  },
-  { 
-    id: 8, 
-    title: "Coastal Compass", 
-    category: "Figma", 
-    description: "Travel companion UI designed for coastal exploration and route planning.", 
-    icon: <Compass size={28} />, 
-    color: "#06b6d4", 
-    link: "https://www.figma.com/proto/BDs6MPDg3y4TbsetQ1M4x9/CostalCompass",
-    mediaType: "video",
-    // Placeholder image
-    mediaSrc: "/assets/costalcompass.mov" 
-  },
-  { 
-    id: 9, 
-    title: "Savvy Saver", 
-    category: "Development", 
-    description: "Personal finance tracker.", 
-    icon: <Smartphone size={28} />, 
-    color: "#14b8a6", 
-    link: "https://savvysaver.vercel.app",
-    mediaType: "image",
-    mediaSrc: "/assets/savvysaver.png"
-  }
+  { id: 0, title: "Nova App Redesign", category: "Figma", description: "Fintech UI redesign featuring glassmorphism, 'Quick Send' flows, and reduced visual noise.", icon: <CreditCard size={28} />, color: "#3b82f6", link: "https://www.figma.com/proto/Y5b1PizrZbKH9M3IvgLDs9/Nova-App-Redesign", mediaType: "video", mediaSrc: "/assets/Nova App.mov" },
+  { id: 1, title: "UI Components Kit", category: "Figma", description: "High-fidelity library of interactive components (carousels, loaders) focusing on micro-interactions.", icon: <Layout size={28} />, color: "#8b5cf6", link: "https://www.figma.com/design/418FHfFGm3hTKFwvSiEhg4/UI-Components-Kit?node-id=0-1&t=twx4pL3RIyKd2eAW-1", mediaType: "image", mediaSrc: "/assets/uicomponents.png" },
+  { id: 2, title: "MindBridge", category: "Development", description: "Accessibility-first platform bridging the gap for neurodiverse users.", icon: <Brain size={28} />, color: "#ec4899", link: "https://mind-bridge-ashen.vercel.app/index.html", mediaType: "video", mediaSrc: "/assets/mindbridge.mp4" },
+  { id: 3, title: "Greeting Cards Maker", category: "Development", description: "Aesthetic, customizable UI allowing users to craft personal e-cards.", icon: <PenTool size={28} />, color: "#ef4444", link: "https://www.linkedin.com/posts/thakur-sameer-shetty-tammana_miniproject-databasemanagement-webdevelopment-activity-7312475852766691331-md4P?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEUvQ6MBdWcS07pVwwfK76b0tcDDFKUgq6E", mediaType: "video", mediaSrc: "/assets/Greeting Cards Maker.mp4" },
+  { id: 4, title: "Lumina Wallet", category: "Development", description: "Next-gen fintech wallet interface.", icon: <Wallet size={28} />, color: "#f59e0b", link: "https://lumina-wallet-fawn.vercel.app", mediaType: "video", mediaSrc: "/assets/luminawallet.mov" },
+  { id: 5, title: "Solo Traveler App", category: "Figma", description: "High-fidelity wireframes solving safety pain points for solo travelers.", icon: <Figma size={28} />, color: "#ff75c3", link: "https://www.figma.com/proto/Ngtg3qmmrWMMwt0Fd7CtOz", mediaType: "video", mediaSrc: "/assets/solotravelapp.mp4" },
+  { id: 6, title: "Gesture Shop", category: "Development", description: "Immersive spatial e-commerce experience using Three.js and hand-tracking.", icon: <Code size={28} />, color: "#61dafb", link: "https://gesture-shop.vercel.app", mediaType: "video", mediaSrc: "/assets/guestureshop.mp4" },
+  { id: 7, title: "Aura Player", category: "Development", description: "Futuristic 3D music player interface with spatial audio visualizations.", icon: <Music size={28} />, color: "#a855f7", link: "https://aura-player-neon.vercel.app", mediaType: "video", mediaSrc: "/assets/auraplayer.mp4" },
+  { id: 8, title: "Coastal Compass", category: "Figma", description: "Travel companion UI designed for coastal exploration and route planning.", icon: <Compass size={28} />, color: "#06b6d4", link: "https://www.figma.com/proto/BDs6MPDg3y4TbsetQ1M4x9/CostalCompass", mediaType: "video", mediaSrc: "/assets/costalcompass.mov" },
+  { id: 9, title: "Savvy Saver", category: "Development", description: "Personal finance tracker.", icon: <Smartphone size={28} />, color: "#14b8a6", link: "https://savvysaver.vercel.app", mediaType: "image", mediaSrc: "/assets/savvysaver.png" }
 ];
 
 export default function App() {
@@ -322,12 +204,16 @@ export default function App() {
   const filtered = filter === "All" ? projects : projects.filter(p => p.category === filter);
   const handleScrollDown = () => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
 
+  // Hook to check for mobile screen size
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const styles = {
-    nav: { display: 'flex', justifyContent: 'space-between', padding: '2rem 5%', alignItems: 'center', zIndex: 20, position: 'relative' },
-    hero: { display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', padding: '2rem 5%', maxWidth: '1400px', margin: '0 auto', zIndex: 10, position: 'relative', minHeight: '85vh' },
-    heroLeft: { flex: '1 1 500px', zIndex: 10, position: 'relative' },
-    heroRight: { flex: '1 1 350px', display: 'flex', justifyContent: 'center', zIndex: 10 },
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2rem', padding: '2rem 5%', paddingBottom: '8rem', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 10 },
+    // We moved most styles to CSS classes for responsiveness, but kept these for dynamic overrides if needed
     tabBtn: { padding: '12px 24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255, 255, 255, 0.03)', color: '#888', cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'Space Grotesk, sans-serif', marginRight: '10px', marginBottom: '10px' },
     activeTab: { background: '#a855f7', color: 'white', borderColor: '#a855f7', boxShadow: '0 0 20px rgba(168, 85, 247, 0.4)' },
   };
@@ -335,27 +221,17 @@ export default function App() {
   return (
     <div>
       <CustomCursor />
-      
-      {/* 3D BOOK MODAL */}
       <BookModal isOpen={isBookOpen} onClose={() => setIsBookOpen(false)} />
 
-      <nav style={styles.nav}>
+      {/* Added className for responsive targeting */}
+      <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '2rem 5%', alignItems: 'center', zIndex: 20, position: 'relative' }} className="nav-container">
         <div style={{ fontWeight: '700', fontSize: '1.4rem', display: 'flex', alignItems: 'center', gap: '12px', letterSpacing: '-0.02em' }}>
           <div style={{ width: '10px', height: '10px', background: '#22c55e', borderRadius: '50%', boxShadow: '0 0 15px #22c55e' }} />
           Thakur Sameer Shetty
         </div>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <button 
-                onClick={() => setIsBookOpen(true)}
-                className="about-btn"
-                style={{ 
-                    background: 'none', border: '1px solid rgba(255,255,255,0.2)', 
-                    color: '#fff', padding: '8px 20px', borderRadius: '50px', 
-                    cursor: 'pointer', fontFamily: 'Space Grotesk', fontSize: '0.9rem',
-                    display: 'flex', alignItems: 'center', gap: '8px'
-                }}
-            >
+            <button onClick={() => setIsBookOpen(true)} className="about-btn" style={{ background: 'none', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '8px 20px', borderRadius: '50px', cursor: 'pointer', fontFamily: 'Space Grotesk', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <User size={16} /> About
             </button>
 
@@ -368,8 +244,11 @@ export default function App() {
         </div>
       </nav>
 
-      <header style={styles.hero}>
-        <div style={styles.heroLeft}>
+      {/* Hero Section with Responsive Classes */}
+      <header style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', padding: '2rem 5%', maxWidth: '1400px', margin: '0 auto', zIndex: 10, position: 'relative', minHeight: '85vh' }} className="hero-section">
+        
+        <div style={{ flex: '1 1 500px', zIndex: 10, position: 'relative' }} className="hero-left">
+          {/* Stickers hidden on mobile via CSS class 'hero-sticker' */}
           <Sticker top={-40} left={250} rotate={15}><div style={{ fontSize: '4rem', filter: 'drop-shadow(0 0 20px rgba(255,0,0,0.5))' }}>❤️</div></Sticker>
           <Sticker top={120} left={-40} rotate={-10}><div style={{ background: '#FFE600', color: 'black', padding: '12px 20px', fontWeight: 'bold', fontFamily: 'Space Grotesk', fontSize: '1.2rem', transform: 'rotate(-5deg)', boxShadow: '5px 5px 0px rgba(255,255,255,0.2)', border: 'none' }}>HIRE ME!</div></Sticker>
           <Sticker bottom={100} right={50} rotate={20}><div style={{ fontSize: '4rem', filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.5))' }}>✨</div></Sticker>
@@ -389,13 +268,29 @@ export default function App() {
             ))}
           </div>
         </div>
-        <div style={styles.heroRight}>
-            <TiltedCard imageSrc="/assets/photo.jpg" altText="Thakur Sameer Shetty" captionText="Thakur Sameer Shetty • UI/UX & Dev" containerHeight="450px" containerWidth="350px" imageHeight="450px" imageWidth="350px" rotateAmplitude={12} scaleOnHover={1.05} showMobileWarning={false} showTooltip={true} displayOverlayContent={true} overlayContent={<div className="my-custom-overlay"><p className="overlay-name">Thakur Sameer Shetty</p><p className="overlay-sub">UI/UX & Developer</p></div>} />
+
+        <div style={{ flex: '1 1 350px', display: 'flex', justifyContent: 'center', zIndex: 10 }} className="hero-right">
+            <TiltedCard 
+              imageSrc="/assets/photo.jpg" 
+              altText="Thakur Sameer Shetty" 
+              captionText="Thakur Sameer Shetty • UI/UX & Dev" 
+              // Responsive Dimensions
+              containerHeight={isMobile ? "350px" : "450px"} 
+              containerWidth={isMobile ? "100%" : "350px"} 
+              imageHeight={isMobile ? "380px" : "450px"} 
+              imageWidth={isMobile ? "280px" : "350px"} 
+              rotateAmplitude={12} 
+              scaleOnHover={1.05} 
+              showMobileWarning={false} 
+              showTooltip={true} 
+              displayOverlayContent={true} 
+              overlayContent={<div className="my-custom-overlay"><p className="overlay-name">Thakur Sameer Shetty</p><p className="overlay-sub">UI/UX & Developer</p></div>} 
+            />
         </div>
         <div className="scroll-indicator" onClick={handleScrollDown}><span>SCROLL DOWN</span><ChevronDown size={24} /></div>
       </header>
 
-      <motion.div layout style={styles.grid}>
+      <motion.div layout style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2rem', padding: '2rem 5%', paddingBottom: '8rem', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 10 }} className="grid-section">
         {filtered.map((project) => (
           <SpotlightCard key={project.id} onClick={() => window.open(project.link, '_blank')} mediaType={project.mediaType} mediaSrc={project.mediaSrc}>
             <div className="spotlight-content">
