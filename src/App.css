@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+:root {
+  --bg-color: #050505;
+  --grid-color: rgba(255, 255, 255, 0.05);
+  --spotlight-color: rgba(255, 255, 255, 0.1);
+  --cursor-size: 20px;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  overflow-x: hidden;
+  cursor: none; /* Custom cursor takes over */
+  
+  /* Grid Background */
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Vignette for grid edges */
+body::before {
+  content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, #050505 100%);
+  pointer-events: none; z-index: -1;
+}
+
+/* --- CUSTOM CURSOR --- */
+.custom-cursor {
+  position: fixed; top: 0; left: 0; width: var(--cursor-size); height: var(--cursor-size);
+  border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 50%; pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference;
+}
+.custom-cursor.hovered { width: 50px; height: 50px; background-color: rgba(255, 255, 255, 0.1); border-color: transparent; backdrop-filter: blur(2px); }
+
+/* --- SOCIAL PILLS --- */
+.social-container { display: flex; gap: 12px; }
+.social-link {
+  display: flex; align-items: center; justify-content: center; width: 45px; height: 45px;
+  border-radius: 50px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden;
+}
+.social-text { opacity: 0; width: 0; font-size: 0.9rem; font-weight: 600; white-space: nowrap; transform: translateX(-10px); transition: all 0.3s ease; }
+.social-link:hover { width: 130px; gap: 10px; color: #fff; transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3); }
+.social-link:hover .social-text { opacity: 1; width: auto; transform: translateX(0); }
+.social-link.github:hover { background: #24292e; border-color: #24292e; }
+.social-link.linkedin:hover { background: #0077b5; border-color: #0077b5; }
+.social-link.dribbble:hover { background: #ea4c89; border-color: #ea4c89; }
+.social-link.mail:hover { background: #ea4335; border-color: #ea4335; }
+
+/* --- TILTED CARD --- */
+.tilted-card-figure { position: relative; width: 100%; height: 100%; perspective: 800px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.tilted-card-inner { position: relative; transform-style: preserve-3d; }
+.tilted-card-img { position: absolute; top: 0; left: 0; object-fit: cover; border-radius: 20px; will-change: transform; transform: translateZ(0); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+.tilted-card-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; will-change: transform; transform: translateZ(30px); border-radius: 20px; }
+.tilted-card-caption { pointer-events: none; position: absolute; left: 0; top: 0; border-radius: 4px; background-color: #fff; padding: 4px 10px; font-size: 10px; color: #2d2d2d; opacity: 0; z-index: 3; }
+.my-custom-overlay { background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; border-radius: 20px; }
+.overlay-name { color: #fff; font-size: 1.5rem; font-weight: 800; margin: 0; }
+.overlay-sub { color: #ccc; font-size: 0.9rem; margin: 0; }
+
+/* --- SPOTLIGHT CARD --- */
+.spotlight-card {
+  position: relative; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(10, 10, 10, 0.8); overflow: hidden; cursor: none;
+  transition: transform 0.2s ease; backdrop-filter: blur(10px);
+}
+.spotlight-card:hover { transform: translateY(-4px); }
+.spotlight-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 20px; padding: 1.5px; width: 100%;
+  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none; opacity: 0; transition: opacity 0.4s ease; z-index: 3;
+}
+.spotlight-card:hover::before { opacity: 1; }
+.media-wrapper { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; opacity: 0; transition: opacity 0.5s ease; overflow: hidden; border-radius: 20px; }
+.spotlight-card:hover .media-wrapper { opacity: 1; }
+.media-preview { width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); transition: transform 6s ease; }
+.spotlight-card:hover .media-preview { transform: scale(1); }
+.media-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.4) 100%); z-index: 1; }
+.spotlight-content { position: relative; z-index: 2; padding: 2rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+
+/* --- SCROLL INDICATOR --- */
+.scroll-indicator {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px;
+  color: #fff; font-size: 0.9rem; letter-spacing: 2px; opacity: 0.7; z-index: 100; animation: bounce 2s infinite; cursor: none;
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+  40% { transform: translate(-50%, -10px); }
+  60% { transform: translate(-50%, -5px); }
+}
+
+/* --- 3D BOOK MODAL --- */
+.book-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+  z-index: 1000; display: flex; justify-content: center; align-items: center;
+  perspective: 1500px;
+}
+
+.book-container {
+  width: 800px; height: 600px; position: relative;
+  transform-style: preserve-3d; display: flex;
+}
+
+.book-left {
+  width: 50%; height: 100%; position: relative; transform-style: preserve-3d; transform-origin: left center; z-index: 10;
+}
+
+.book-cover-front {
+  position: absolute; width: 100%; height: 100%;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+  border: 2px solid #333; border-radius: 8px 0 0 8px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  backface-visibility: hidden; box-shadow: 5px 5px 20px rgba(0,0,0,0.5); padding: 20px; text-align: center;
+}
+
+.book-inside-left {
+  position: absolute; width: 100%; height: 100%;
+  background: #f5f5f5; color: #333; border-radius: 8px 0 0 8px;
+  transform: rotateY(180deg); backface-visibility: hidden;
+  padding: 40px; display: flex; flex-direction: column; box-shadow: inset -5px 0 20px rgba(0,0,0,0.1);
+  font-family: 'Inter', sans-serif; justify-content: center;
+}
+
+.book-right {
+  width: 50%; height: 100%; background: #fff; border-radius: 0 8px 8px 0;
+  padding: 0; display: flex; flex-direction: column; box-shadow: inset 5px 0 20px rgba(0,0,0,0.1);
+  position: relative; z-index: 5; overflow: hidden;
+}
+
+.resume-frame { width: 100%; height: 100%; border: none; display: block; }
+
+.pdf-action-bar { position: absolute; bottom: 20px; right: 20px; z-index: 20; }
+
+.download-pill {
+  background: #22c55e; color: white; padding: 8px 16px; border-radius: 50px;
+  text-decoration: none; font-size: 0.8rem; font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 6px;
+  transition: transform 0.2s;
+}
+.download-pill:hover { transform: scale(1.05); }
+
+.close-btn {
+  position: absolute; top: -40px; right: -40px;
+  background: rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px;
+  border: none; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.close-btn:hover { background: rgba(255,255,255,0.3); }
